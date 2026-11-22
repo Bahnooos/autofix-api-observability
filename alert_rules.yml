@@ -1,0 +1,11 @@
+groups:
+  - name: latency_alerts
+    rules:
+      - alert: HighRequestLatency
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m])) by (le)) > 0.01
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API p95 latency detected (> 10ms)"
+          description: "p95 latency exceeded 0.01s for 10 seconds during load."
